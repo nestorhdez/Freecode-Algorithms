@@ -1,0 +1,84 @@
+:root {
+    --primary-color: #323232;
+    --secondary-color: #fff;
+    --palindrdome: #28a528;
+    --non-palindrome: #f54646;
+  }
+  
+  body {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    display: flex;
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  #container {
+    margin: 50px auto;
+  }
+
+  .arrow-back {
+    color: var(--secondary-color);
+    font-size: 1.5rem;
+    position: absolute;
+    top: 2rem;
+    left: 2rem; 
+  }
+  
+  #title {
+    margin: 0 0 50px;
+    text-align: center;
+    font-weight: normal;
+    font-size: 2.5rem;
+  }
+  
+  #primary-input {
+    height: 100px;
+    width: 300px;
+    border: none;
+    border-radius: 5px;
+    display: block;
+    margin: auto;
+    text-align: center;
+    font-size: 2rem;
+    color: var(--primary-color);
+  }
+  
+  #check-btn {
+    cursor: pointer;
+    border: none;
+    border-radius: 3px;
+    height: 30px;
+    width: 300px;
+    display: block;
+    margin: 20px auto 0;
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 20px;
+  }
+  
+  .result {
+    margin: 35px 0 0;
+    text-align: center;
+    font-weight: normal;
+    font-size: 2.3rem;
+    color: var(--secondary-color);
+  }
+
+  #truePalindrome {
+    color: var(--palindrdome);
+  }
+  
+  #faslePalindrome {
+    color: var(--non-palindrome);
+  }
+
+  @media(min-width: 768px) {
+    .arrow-back {
+      top: 3rem;
+      left: 3rem;
+    }
+  }
