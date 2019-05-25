@@ -20,10 +20,6 @@ body {
     text-align: center;
 }
 
-.progress {
-    text-align: center;
-}
-
 #projects-container {
     margin: 70px 30px 50px;
     display: grid;
