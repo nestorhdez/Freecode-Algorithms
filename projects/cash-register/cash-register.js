@@ -1,5 +1,3 @@
-let changeDueTotal;
-
 const coinValue = {
   PENNY: 0.01,
   NICKEL: 0.05,
@@ -18,46 +16,48 @@ const sumAmountOfMoney = (cid) => {
   return total;
 }
 
-const setChangeDue = (price, cash) => {
+const calcChangeDue = (price, cash) => {
   return (cash - price);
 }
 
 const checkCashRegister = (price, cash, cid) => {
-  changeDueTotal = setChangeDue(price, cash);
-  if(sumAmountOfMoney(cid) < changeDueTotal){
+  if(sumAmountOfMoney(cid) < calcChangeDue(price, cash)){
     return {status: 'INSUFFICIENT_FUNDS', change: []};
-  }else if(sumAmountOfMoney(cid) === changeDueTotal) {
+  }else if(sumAmountOfMoney(cid) === calcChangeDue(price, cash)) {
     return {status: 'CLOSED', change: cid};
   }else {
-    return changeToReturn( cid.reverse() );
+    return changeToReturn( cid.reverse(), calcChangeDue(price, cash) );
   }
 }
 
-const changeToReturn = (cid) => {
+const changeToReturn = (cid, changeDue) => {
   let change = [];
-  cid.forEach( coin => change.push( changePerCoin(coin) ) );
-  return sumAmountOfMoney(change) < changeDueTotal ? {status: 'INSUFFICIENT_FUNDS', change: []} : {status: 'OPEN', change: change.filter(val => val[1])};
+  let changeDueCount = changeDue;
+  cid.forEach( coin => {
+    let changePerCoinArray = changePerCoin(coin, changeDueCount);
+    change.push( changePerCoinArray );
+    changeDueCount = Number.parseFloat((changeDueCount - changePerCoinArray[1]).toFixed(2));;
+  });
+  return sumAmountOfMoney(change) < changeDue ? {status: 'INSUFFICIENT_FUNDS', change: []} : {status: 'OPEN', change: change.filter(val => val[1])};
 }
 
-const changePerCoin = (coinArray) => {
+const changePerCoin = (coinArray, changeDueCount) => {
   let amountOfMoney = coinArray[1];
   let currencyUnit = coinArray[0];
-  if(coinValue[currencyUnit] > changeDueTotal || amountOfMoney == 0) {
+  if(coinValue[currencyUnit] > changeDueCount || amountOfMoney == 0) {
     return [currencyUnit, 0];
-  }else if(changeDueTotal === amountOfMoney) {
-    changeDueTotal -= amountOfMoney;
+  }else if(changeDueCount === amountOfMoney) {
     return coinArray;
   }else {
     let amountToReturn = 0;
-    if(changeDueTotal > 0){
-      while(amountToReturn <= changeDueTotal) {
-        if( ( amountToReturn + coinValue[currencyUnit] ).toFixed(2) > changeDueTotal  || amountToReturn >= amountOfMoney ) {
+    if(changeDueCount > 0){
+      while(amountToReturn <= changeDueCount) {
+        if( ( amountToReturn + coinValue[currencyUnit] ).toFixed(2) > changeDueCount  || amountToReturn >= amountOfMoney ) {
           break;
         }
         amountToReturn += coinValue[currencyUnit];
       }
     }
-    changeDueTotal = Number.parseFloat((changeDueTotal - amountToReturn).toFixed(2));
     return [currencyUnit, amountToReturn];
   }
 }
